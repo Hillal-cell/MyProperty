@@ -179,7 +179,7 @@ app.post("/registration", async (req, res) => {
 // Handle the image upload route
 app.post("/landlordpage", upload.single("image"), (req, res) => {
   // Here, you can access the uploaded image using req.file
-  req.uploads
+  
   // Save the necessary information to your database
 
   // Extract form data from the request
@@ -194,11 +194,15 @@ app.post("/landlordpage", upload.single("image"), (req, res) => {
   } = req.body;
 
   // Get the uploaded image filename
-  const imageFilename = req.file.filename;
+   const imageFilename = req.file.originalname;
+  //var CurrentDate = new Date()
   //const Date = Date.now
+  // Get the current date
+ var  Dateadded = new Date()
+
 
   // insert the data into the database table called properties
-  pool.query ('INSERT INTO properties (PropertyName, Type, Location, Description, Number_Of_Bedrooms, Number_Of_Bathrooms, Cost, Image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+  pool.query ('INSERT INTO properties (PropertyName, Type, Location, Description, Number_Of_Bedrooms, Number_Of_Bathrooms, Cost, Dateadded,  imageFilename) VALUES (?, ?, ?, ?, ?, ?, ?, ? , ?)',
     [
       PropertyName,
       Type,
@@ -207,7 +211,7 @@ app.post("/landlordpage", upload.single("image"), (req, res) => {
       Number_Of_Bedrooms,
       Number_Of_Bathrooms,
       Cost,
-      Date,
+      Dateadded,
       imageFilename,
     ],
     (err, results) => {
