@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/req.css">
+</head>
+<body>
+    <h1 class="ttl">Online Lease Application Form</h1>
+    
+    <div class="frm">
+        <form action="/leaserequest" method="post" >
+            <p><label id="l1">First Name</label>
+                <input name="first_name" type="text" placeholder="first name" id="tag1" required>
+            </p>
+            <p>
+                <label id="l1">Surame</label>
+                <input name="surname" type="text" placeholder="Surname" id="tag2" required>
+            </p>
+            
+                <p>
+                    <label id="l1">Contact</label>
+                    <input name="contact" type="number"  placeholder="+256" id="tag3" required>
+                </p>
+                <p>
+                    <label id="l1">Address 1</label>
+                    <input name="address_1" type="text" name="" id="tag4" placeholder="Address1" required>
+                    
+                </p>
+                <p>
+                    <label id="l1">Street</label>
+                    <input name="street" type="text" id="tag5" placeholder="e.g Seventh" required>
+                    
+                </p>
+                <p>
+                    <label id="l1">Address 2</label>
+                    <input type="text" name="address_2" id="tag4" placeholder="optional" >
+                    
+                </p>
+                <p>
+                    <label id="l1"> Line 1</label>
+                    <input type="text" name="line_1" id="tag4" placeholder="+256" required>
+                    
+                </p>
+                <p>
+                    <label id="l1">Line 2</label>
+                    <input type="text" name="line_2" id="tag4" placeholder="+256..,optional" >
+                    
+                </p>
+                <p>
+                    <label id="l1">Home Phone</label>
+                    <input type="text" name="home_Phone" id="tag4" placeholder="Optional" >
+                </p>
+                <p>
+                    <label for="">Postal Code</label>
+                    <input name="postal_code" type="number" id="tag8" placeholder="e.g 12345" required>
+                </p>
+                
+                <p>
+                    <label for=""> Property</label>
+                    <input name="property" type="text" id="tag6">
+                    <label for="">Number_Of_Units</label required>
+                    <input name="number_of_units" type="number" id="tag7" placeholder="Enter number of house units you want" required>
+                </p>
+            
+                <button type="submit">Submit</button> 
+    
+    
+            
+            
+         </form>
+
+    </div>
+     
+</body>
+</html>

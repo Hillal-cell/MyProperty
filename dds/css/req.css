@@ -1,0 +1,33 @@
+.ttl{
+    color :gold;
+    position: relative;
+    margin-left: 29%;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    padding: 1px;
+
+}
+
+.frm{
+    position: relative;
+    margin-top: 10px;
+    margin-right: 10%;
+    margin-left: 30%;
+    display: inline-flex;
+    font-size: larger;
+}
+body{
+    background-color: whitesmoke;
+}
+#l1{
+    padding-right:20px ;
+}
+
+#tag1,#tag2,#tag3,#tag3,#tag4,#tag5,#tag6,#tag7,#tag8{
+    width: 100%;
+    background-color: bisque;
+    border: none;
+}
+body{
+    background-image: url(../Images/bg.png);
+    background-size: cover;
+}

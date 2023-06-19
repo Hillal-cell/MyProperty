@@ -1,0 +1,79 @@
+ul.navbar {
+    background-image: url('Images/landing.jpeg');
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #f1f1f1;
+  }
+  
+  ul.navbar li {
+    display: inline-block;
+  }
+  
+  ul.navbar li a {
+    display: block;
+    color: #333;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  ul.navbar li a:hover {
+    background-color: #ddd;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  div.search {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  div.buttons {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  div.buttons button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 20px;
+  }
+  
+  div.buttons button:last-child {
+    margin-right: 0;
+  }
+  
+  div.buttons button:hover {
+    opacity: 0.8;
+  }
+  
+  body {
+    background-image: url('..\Images\landing.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    animation: scrollBackground 60s linear infinite;
+  }
+  
+  @keyframes scrollBackground {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: -2000px 0;
+    }
+  }
+  
