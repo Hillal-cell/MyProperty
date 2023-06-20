@@ -277,6 +277,9 @@ app.post("/leaserequest", (req, res) => {
   );
 });
 
+
+
+     //authentication
 app.post("/index", async function (request, response) {
   // Capture the input fields
   let email = request.body.email;
