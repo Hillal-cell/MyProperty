@@ -8,6 +8,7 @@ const bcrypt = require("bcrypt");
 const { hash } = require("bcrypt");
 const { hashSync } = require("bcrypt");
 const { env } = require("process");
+
 //const assert = require('assert')
 // const bodyParser = require ('body-parser')
 
@@ -54,7 +55,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-
+   
 //session middleware
 app.use(
   session({
@@ -69,7 +70,7 @@ app.use(
 app.use(express.json()); // this is to accept data sent in json format
 app.use(express.urlencoded({ extended: true })); // this is basically to decode the data sent through the html form
 app.use(express.static("dds")); //this is to serve html files and also act as the  static folder
-
+app.use(express.static('uploads'));
 // //Flash middleware
 // app.use(flash())
 
@@ -194,7 +195,8 @@ app.post("/landlordpage", upload.single("image"), (req, res) => {
   } = req.body;
 
   // Get the uploaded image filename
-   const imageFilename = req.file.originalname;
+  const imageFilename = req.file.filename;
+   
   //var CurrentDate = new Date()
   //const Date = Date.now
   // Get the current date
@@ -327,6 +329,35 @@ app.post("/index", async function (request, response) {
     }
   );
 });
+
+//allow ejs files to be read 
+app.set('views', path.join(__dirname, '/views'));
+app.set('view engine', 'ejs'); 
+
+
+
+
+
+//images to be trieved from database to the landing page 
+
+app.get('/properties',(req,res)=>{
+  pool.query('SELECT * FROM properties',(err,results)=>{
+    if (err) {
+      console.log('Error retrieval of data from database')
+      return  res.status(500).json({message: 'Internal server error '})
+    }
+    res.render('properties',{properties: results , });
+
+  })
+})
+
+
+// app.get('/properties', (req, res) => {
+//   // Retrieve property details, including the image data or URL, from the database
+//   const property = getPropertyFromDatabase(req.params.id);
+//   // Render the template and pass the property details as variables
+//   res.render('property', { property });
+// });
 
 
 //TODO THE USER WANTS TO UPDATE HIS OR HER PASSWORD

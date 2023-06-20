@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Properties</title>
+  </head>
+  <body style="display: inline;">
+    <h1>Properties</h1>
+    <% properties.forEach((property) => { %>
+    <div>
+      <h2><%= property.PropertyName %></h2>
+      <p>Type: <%= property.Type %></p>
+      <p>Location: <%= property.Location %></p>
+      <p>Description: <%= property.Description %></p>
+      <p>Number of Bedrooms: <%= property.Number_Of_Bedrooms %></p>
+      <p>Number of Bathrooms: <%= property.Number_Of_Bathrooms %></p>
+      <p>Cost: <%= property.Cost %></p>
+      <img src="<%= '/' + property.imageFilename %>" alt="<%= property.PropertyName %>" width="200" height="200">
+    </div>
+    <% }); %>
+  </body>
+</html>
