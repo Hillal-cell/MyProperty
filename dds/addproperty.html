@@ -8,20 +8,21 @@
     <link rel="stylesheet" href="./css/landlord.css">
 </head>
 <body>
+  <h1 class="hanler" style="position: relative; margin-left: 40%;" >IMAGE UPLOAD</h1>
     <form action="/landlordpage" method="post" enctype="multipart/form-data">
-         <div class="container" id="imgBox"  >
+          <div class="container" id="imgBox"  >
         <div id="prevText"></div>
         <textarea  id="textBox" placeholder="add comment"></textarea>
         
 
         <input  type="file" multiple accept="images/*" name="image" id="file"  style="display: none;" onchange="loadFile(event)">
-        <label  multiple for="file"  ><img style="height: 50px;width:50px " class="uploadicon" src="Images/search icon.png" alt=""></label>
+        <label  multiple for="file"  ><img style="height: 40px;width:40px " class="uploadicon" src="Images/search icon.png" alt=""></label>
 
         </div>
 
         
         
-        </div>
+        
 
      
         <div class="about">
@@ -48,8 +49,9 @@
           
             
         </div>
-        <p id="subt">
-            <input type="submit">
+        <p >
+          <button id="subt" type="submit">Submit</button>
+            
         </p>
         
         

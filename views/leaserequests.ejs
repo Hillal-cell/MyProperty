@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEASE REQUESTS</title>
+</head>
+<body>
+    <%lease_request.forEach((leaserequest))=>{
+        %> <div style="display: inline-block;">
+            <h2><%= leaserequest.first_name %> </h2>
+            <p>FIRST NAME<%= leaserequest.first_name %></p>
+            <p>SURNAME NAME<%= leaserequest.surname %></p>   
+            <p>CONTACT<%= leaserequest.contact %></p>
+            <p>ADDRESS 1<%= leaserequest.address_1 %></p>
+            <p>STREET<%= leaserequest.street %></p>
+            <p>ADDRESS 2<%= leaserequest.address_2 %></p>
+            <p>PHONE LINE 1<%= leaserequest.line_1 %></p>
+            <p>PHONE LINE 2<%= leaserequest.line_2 %></p>
+            <p>HOME PHONE<%= leaserequest.home_Phone %></p>
+            <p>POSTAL CODE<%= leaserequest.postal_code %></p>
+            <p>PROPERTY REQUESTIND FOR <%= leaserequest.property %></p>
+            <p>NUMBER OF REQUIRED UNITS<%= leaserequest.number_of_units %></p>
+
+            
+        </div>
+    }
+    
+</body>
+</html>

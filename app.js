@@ -8,6 +8,7 @@ const bcrypt = require("bcrypt");
 const { hash } = require("bcrypt");
 const { hashSync } = require("bcrypt");
 const { env } = require("process");
+const { error } = require("console");
 
 //const assert = require('assert')
 // const bodyParser = require ('body-parser')
@@ -179,11 +180,9 @@ app.post("/registration", async (req, res) => {
 
 // Handle the image upload route
 app.post("/landlordpage", upload.single("image"), (req, res) => {
-  // Here, you can access the uploaded image using req.file
+  
   
   // Save the necessary information to your database
-
-  // Extract form data from the request
   const {
     PropertyName,
     Type,
@@ -197,9 +196,7 @@ app.post("/landlordpage", upload.single("image"), (req, res) => {
   // Get the uploaded image filename
   const imageFilename = req.file.filename;
    
-  //var CurrentDate = new Date()
-  //const Date = Date.now
-  // Get the current date
+  
  var  Dateadded = new Date()
 
 
@@ -224,7 +221,8 @@ app.post("/landlordpage", upload.single("image"), (req, res) => {
 
       // Example response
         console.log('new  image posted to database  ')
-      res.json({ message: "Image uploaded and data saved successfully." });
+        res.render('')
+      //res.json({ message: "Image uploaded and data saved successfully." });
     }
     );
 });
@@ -235,7 +233,7 @@ app.post("/leaserequest", (req, res) => {
     first_name,
     surname,
     contact,
-    address_1,
+    address_1, 
     address_2,
     line_1,
     line_2,
@@ -346,9 +344,44 @@ app.get('/properties',(req,res)=>{
       console.log('Error retrieval of data from database')
       return  res.status(500).json({message: 'Internal server error '})
     }
-    res.render('properties',{properties: results , });
+    res.render('properties',{properties: results  });
 
   })
+})
+
+
+//feedback capture
+app.post('/properties',(req,res)=>{
+  
+  //saving necessary information into database
+
+  //document.getElementsByClassName('Comments').addEventlistener
+
+  const{comments,likes,dislikes}=req.body
+  
+  pool.query('insert into PropertyFeedback (comments,likes,dislikes) values (?,?,?)'[comments,likes,dislikes],(error)=>{
+    if (error) {
+      console.log(error)
+      return
+    }console.log('feed back captured  ')
+
+  }
+  )
+})
+
+
+
+//api to handle lease requests
+
+app.get('/leaserequests',(req,res)=>{
+  pool.query('SELECT * FROM lease_request',(error,results)=>{
+    if (error) {
+      console.log('Error retrieval of data from database')
+      return res.status(500).json({message: 'Internal server error '})
+    }
+    res.render('leaserequests',{leaserequest: results})
+  })
+
 })
 
 
