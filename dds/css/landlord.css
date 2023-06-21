@@ -21,7 +21,7 @@
 .h{
     position: relative;
     margin-left: 40%;
-    color:gold;
+    color:rgb(147, 155, 59);
     font-weight: bolder;
     padding-bottom: 10px;
 }
@@ -62,7 +62,7 @@ ul.navbar {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color:yellowgreen;
+    
   }
 
   ul.navbar li {
@@ -71,21 +71,21 @@ ul.navbar {
 
   ul.navbar li a {
     display: block;
-    color: rgb(243, 231, 231);
+    color: rgb(196, 47, 47);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
   }
 
   ul.navbar li a:hover {
-   background-color: goldenrod   ;
+   background-color: rgb(67, 8, 20)   ;
   }
  
   #b1{
    margin-left: 105px;
    margin-bottom: 10px;
    padding-left: 10px;
-   background-color: bisque;
+   background-color: rgb(190, 121, 35);
          border-radius: 10px;
   }
 
