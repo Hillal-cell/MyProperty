@@ -368,7 +368,7 @@ app.get("/leaserequests", (req, res) => {
     res.render("leaserequests", { leaserequest: results });
   });
 });
-
+  
 // app.get('/properties', (req, res) => {
 //   // Retrieve property details, including the image data or URL, from the database
 //   const property = getPropertyFromDatabase(req.params.id);
