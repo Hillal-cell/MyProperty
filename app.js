@@ -15,7 +15,6 @@ const { error } = require("console");
 
 //const connection = any();
 
-
 const app = express(); // this is our instance of express
 
 // app.set("view engine", "ejs");
@@ -55,8 +54,6 @@ const storage = multer.diskStorage({
 // Initialize multer with the storage configuration
 const upload = multer({ storage: storage });
 
-
-   
 //session middleware
 app.use(
   session({
@@ -71,7 +68,7 @@ app.use(
 app.use(express.json()); // this is to accept data sent in json format
 app.use(express.urlencoded({ extended: true })); // this is basically to decode the data sent through the html form
 app.use(express.static("dds")); //this is to serve html files and also act as the  static folder
-app.use(express.static('uploads'));
+app.use(express.static("uploads"));
 // //Flash middleware
 // app.use(flash())
 
@@ -177,11 +174,8 @@ app.post("/registration", async (req, res) => {
   );
 });
 
-
 // Handle the image upload route
 app.post("/landlordpage", upload.single("image"), (req, res) => {
-  
-  
   // Save the necessary information to your database
   const {
     PropertyName,
@@ -195,13 +189,12 @@ app.post("/landlordpage", upload.single("image"), (req, res) => {
 
   // Get the uploaded image filename
   const imageFilename = req.file.filename;
-   
-  
- var  Dateadded = new Date()
 
+  var Dateadded = new Date();
 
   // insert the data into the database table called properties
-  pool.query ('INSERT INTO properties (PropertyName, Type, Location, Description, Number_Of_Bedrooms, Number_Of_Bathrooms, Cost, Dateadded,  imageFilename) VALUES (?, ?, ?, ?, ?, ?, ?, ? , ?)',
+  pool.query(
+    "INSERT INTO properties (PropertyName, Type, Location, Description, Number_Of_Bedrooms, Number_Of_Bathrooms, Cost, Dateadded,  imageFilename) VALUES (?, ?, ?, ?, ?, ?, ?, ? , ?)",
     [
       PropertyName,
       Type,
@@ -220,11 +213,11 @@ app.post("/landlordpage", upload.single("image"), (req, res) => {
       }
 
       // Example response
-        console.log('new  image posted to database  ')
-        res.render('')
+      console.log("new  image posted to database  ");
+      res.render("");
       //res.json({ message: "Image uploaded and data saved successfully." });
     }
-    );
+  );
 });
 
 //to post leaserequest form in the database
@@ -233,7 +226,7 @@ app.post("/leaserequest", (req, res) => {
     first_name,
     surname,
     contact,
-    address_1, 
+    address_1,
     address_2,
     line_1,
     line_2,
@@ -277,9 +270,7 @@ app.post("/leaserequest", (req, res) => {
   );
 });
 
-
-
-     //authentication
+//authentication
 app.post("/index", async function (request, response) {
   // Capture the input fields
   let email = request.body.email;
@@ -328,62 +319,55 @@ app.post("/index", async function (request, response) {
   );
 });
 
-//allow ejs files to be read 
-app.set('views', path.join(__dirname, '/views'));
-app.set('view engine', 'ejs'); 
+//allow ejs files to be read
+app.set("views", path.join(__dirname, "/views"));
+app.set("view engine", "ejs");
 
+//images to be trieved from database to the landing page
 
-
-
-
-//images to be trieved from database to the landing page 
-
-app.get('/properties',(req,res)=>{
-  pool.query('SELECT * FROM properties',(err,results)=>{
+app.get("/properties", (req, res) => {
+  pool.query("SELECT * FROM properties", (err, results) => {
     if (err) {
-      console.log('Error retrieval of data from database')
-      return  res.status(500).json({message: 'Internal server error '})
+      console.log("Error retrieval of data from database");
+      return res.status(500).json({ message: "Internal server error " });
     }
-    res.render('properties',{properties: results  });
-
-  })
-})
-
+    res.render("properties", { properties: results });
+  });
+});
 
 //feedback capture
-app.post('/properties',(req,res)=>{
-  
+app.post("/properties", (req, res) => {
   //saving necessary information into database
 
   //document.getElementsByClassName('Comments').addEventlistener
 
-  const{comments,likes,dislikes}=req.body
-  
-  pool.query('insert into PropertyFeedback (comments,likes,dislikes) values (?,?,?)'[comments,likes,dislikes],(error)=>{
-    if (error) {
-      console.log(error)
-      return
-    }console.log('feed back captured  ')
+  const { comments, likes, dislikes } = req.body;
 
-  }
-  )
-})
-
-
+  pool.query(
+    "insert into PropertyFeedback (comments,likes,dislikes) values (?,?,?)"[
+      (comments, likes, dislikes)
+    ],
+    (error) => {
+      if (error) {
+        console.log(error);
+        return;
+      }
+      console.log("feed back captured  ");
+    }
+  );
+});
 
 //api to handle lease requests
 
-app.get('/leaserequests',(req,res)=>{
-  pool.query('SELECT * FROM lease_request',(error,results)=>{
+app.get("/leaserequests", (req, res) => {
+  pool.query("SELECT * FROM lease_request", (error, results) => {
     if (error) {
-      console.log('Error retrieval of data from database')
-      return res.status(500).json({message: 'Internal server error '})
+      console.log("Error retrieval of data from database");
+      return res.status(500).json({ message: "Internal server error " });
     }
-    res.render('leaserequests',{leaserequest: results})
-  })
-
-})
-
+    res.render("leaserequests", { leaserequest: results });
+  });
+});
 
 // app.get('/properties', (req, res) => {
 //   // Retrieve property details, including the image data or URL, from the database
@@ -391,7 +375,6 @@ app.get('/leaserequests',(req,res)=>{
 //   // Render the template and pass the property details as variables
 //   res.render('property', { property });
 // });
-
 
 //TODO THE USER WANTS TO UPDATE HIS OR HER PASSWORD
 app.post("/passwordreset", (req, res) => {
