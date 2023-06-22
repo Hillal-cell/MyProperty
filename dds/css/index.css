@@ -34,8 +34,9 @@
     margin-right: 10%;
 }
 body{
-    background-image: url(/Images/tenant.jpg);
+    background-image: url(../Images/tenant.jpg);
     background-size: cover;
+    
 }
 
 .butn{
@@ -49,7 +50,7 @@ body{
     color: cadetblue;
     cursor: grab;
 }
-.in1,.in2,.in3{
+.in1,.in2{
     background-color:rgba(255, 255, 255, 0.058);
     border: none;
     width: 100%;
@@ -75,5 +76,5 @@ body{
 }
 .lastpp{
     font-size: medium;
-    color: aqua;
+    color: steelblue;
 }

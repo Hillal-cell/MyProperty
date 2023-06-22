@@ -4,15 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LEASE REQUESTS</title>
-</head>
-<style>
+    <link rel="shortcut icon" href="../Images/favicon.png" type="image/x-icon">
+    <style>
+
     body{
+        background-color: beige;
+        background-image: url('../Images/login.jpg');
+        background-size: cover;
+
+    }
+    .container{
+        width: 30%;
+        height: 50%;
+        border: 10px;
+        background-color:blanchedalmond;
+        border-radius: 20px;
+        border-style: groove;
         
     }
-</style>
+    h1,h2{
+        padding-left: 40%;
+        color: burlywood;
+    }
+    
+    
+
+    </style>
+</head>
+
 <body>
+    <h1 >LEASE REQUESTS</h1>
     <% leaserequest.forEach(function(leaserequest) { %>
-        <div style="display: inline-block;">
+        <div style="display: inline-block;" class="container">
             <h2><%= leaserequest.first_name %></h2>
             <p>FIRST NAME: <%= leaserequest.first_name %></p>
             <p>SURNAME: <%= leaserequest.surname %></p>   

@@ -68,7 +68,8 @@ app.use(
 app.use(express.json()); // this is to accept data sent in json format
 app.use(express.urlencoded({ extended: true })); // this is basically to decode the data sent through the html form
 app.use(express.static("dds")); //this is to serve html files and also act as the  static folder
-app.use(express.static("uploads"));
+app.use(express.static("Images"));
+app.use(express.static('myProperty'))
 // //Flash middleware
 // app.use(flash())
 
@@ -85,13 +86,13 @@ app.use(express.static("uploads"));
 //   res.render(__dirname + "/dds/index.ejs", { errorFlash });
 // });
 
-// app.get("/leaserequest", (req, res) => {
-//   res.sendFile(__dirname + "/dds/leaserqt.html");
-// });
+app.get("/index", (req, res) => {
+  res.sendFile(__dirname + "/dds/index.html");
+});
 
-// app.get("/dashboard", (req, res) => {
-//   res.sendFile(__dirname + "/dds/dashboard.html");
-// });
+app.get("/dashboard", (req, res) => {
+  res.sendFile(__dirname + "/dds/dashboard.html");
+});
 
 /*app.post('/form',(req,res)=>{
     console.log(req.body); //the data we get is in the body of request 
@@ -206,7 +207,7 @@ app.post("/landlordpage", upload.single("image"), (req, res) => {
       Dateadded,
       imageFilename,
     ],
-    (err, results) => {
+    (err) => {
       if (err) {
         console.error("Error inserting data into the database:", err);
         return res.status(500).json({ message: "Internal Server Error" });
@@ -214,7 +215,7 @@ app.post("/landlordpage", upload.single("image"), (req, res) => {
 
       // Example response
       console.log("new  image posted to database  ");
-      res.render("");
+      res.redirect("thanks.html");
       //res.json({ message: "Image uploaded and data saved successfully." });
     }
   );
@@ -297,7 +298,7 @@ app.post("/index", async function (request, response) {
 
           if (role === "tenant") {
             // Redirect to the tenant dashboard page
-            response.redirect("./dashboard.html");
+            response.redirect("/dashboard");
             console.log("Successfully logged in as a tenant");
           } else {
             // Redirect to the landlord page
@@ -306,12 +307,12 @@ app.post("/index", async function (request, response) {
           }
         } else {
           // Authentication failed
-          response.redirect("./index.html");
+          response.redirect("/index");
           console.log("Wrong email or password input");
         }
       } else {
         // Account with the specified email not found
-        response.redirect("./index.html");
+        response.redirect("/index");
         console.log("Account not found");
       }
       response.end();
@@ -322,6 +323,7 @@ app.post("/index", async function (request, response) {
 //allow ejs files to be read
 app.set("views", path.join(__dirname, "/views"));
 app.set("view engine", "ejs");
+
 
 //images to be trieved from database to the landing page
 
@@ -359,16 +361,16 @@ app.post("/properties", (req, res) => {
 
 //api to handle lease requests
 
-app.get("/leaserequests", (req, res) => {
+app.get("/leaserequest", (req, res) => {
   pool.query("SELECT * FROM lease_request", (error, results) => {
     if (error) {
       console.log("Error retrieval of data from database");
       return res.status(500).json({ message: "Internal server error " });
     }
-    res.render("leaserequests", { leaserequest: results });
+    res.render("leaserequest", { leaserequest: results });
   });
 });
-  
+
 // app.get('/properties', (req, res) => {
 //   // Retrieve property details, including the image data or URL, from the database
 //   const property = getPropertyFromDatabase(req.params.id);
