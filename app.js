@@ -69,7 +69,7 @@ app.use(express.json()); // this is to accept data sent in json format
 app.use(express.urlencoded({ extended: true })); // this is basically to decode the data sent through the html form
 app.use(express.static("dds")); //this is to serve html files and also act as the  static folder
 app.use(express.static("Images"));
-app.use(express.static('myProperty'))
+app.use(express.static('uploads'))
 // //Flash middleware
 // app.use(flash())
 
