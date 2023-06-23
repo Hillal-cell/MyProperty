@@ -9,7 +9,7 @@ const { hash } = require("bcrypt");
 const { hashSync } = require("bcrypt");
 const { env } = require("process");
 const { error } = require("console");
-
+const fs = require('fs')
 //const assert = require('assert')
 // const bodyParser = require ('body-parser')
 
@@ -17,29 +17,26 @@ const { error } = require("console");
 
 const app = express(); // this is our instance of express
 
-// app.set("view engine", "ejs");
-// app.set("views", __dirname + "/dds");
+app.get('/execute', (req, res) => {
+  fs.readFile('./final_propdb.sql', 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading SQL file:', err);
+      res.status(500).send('Internal Server Error');
+      return;
+    }
 
-//image upload by landlord
+    connection.query(data, (err) => {
+      if (err) {
+        console.error('Error executing SQL query:', err);
+        res.status(500).send('Internal Server Error');
+        return;
+      }
 
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "Imagess");
-//   },
-//   filename: (req, file, cb) => {
-//     console.log(file);
-//     cb(null, Date.now() + path.extname(file.originalname));
-//   },
-// });
+      res.send('SQL script executed successfully!');
+    });
+  });
+});
 
-// const upload = multer({ storage: storage });
-
-// app.get("upload", (req, res) => {
-//   res.render("/dds/addproperty.html");
-// });
-// app.post("/landlordpage", upload.single("image"), (req, res) => {
-//   res.send("<h1>Image successfully uploaded</h1>");
-// });
 
 // Set up multer storage to define where to store the uploaded image
 const storage = multer.diskStorage({
@@ -118,7 +115,7 @@ app.get("/administrator", (req, res) => {
   res.sendFile(__dirname + "/dds/administrator.html");
 });
 
-//MYSQL connection
+//instating pool
 const pool = mysql2.createPool({
   connectionLimit: 25,
   host: "localhost",
@@ -127,6 +124,7 @@ const pool = mysql2.createPool({
   database: "final_propdb",
 });
 
+//mysql connection
 const connection = mysql2.createConnection({
   host: "localhost",
   user: "root",
