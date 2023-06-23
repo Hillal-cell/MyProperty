@@ -114,6 +114,10 @@ app.get("/landlordpage", (req, res) => {
   res.sendFile(__dirname + "/dds/landlordpage.html");
 });
 
+app.get("/administrator", (req, res) => {
+  res.sendFile(__dirname + "/dds/administrator.html");
+});
+
 //MYSQL connection
 const pool = mysql2.createPool({
   connectionLimit: 25,
@@ -300,7 +304,12 @@ app.post("/index", async function (request, response) {
             // Redirect to the tenant dashboard page
             response.redirect("/dashboard");
             console.log("Successfully logged in as a tenant");
-          } else {
+          }if (role === "system_admin") {
+            // Redirect to the tenant dashboard page
+            response.redirect("/admin");
+            console.log("Successfully logged in as a tenant");}
+
+          else {
             // Redirect to the landlord page
             response.redirect("./landlordpage.html");
             console.log("Successfully logged in as a landlord");
@@ -361,7 +370,7 @@ app.post("/properties", (req, res) => {
 
 //api to handle lease requests
 
-app.get("/leaserequest", (req, res) => {
+app.get("/leaserequest||leaserequests", (req, res) => {
   pool.query("SELECT * FROM lease_request", (error, results) => {
     if (error) {
       console.log("Error retrieval of data from database");

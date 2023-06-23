@@ -14,7 +14,7 @@
         cursor: pointer;
       }
       h1{
-        padding-left: 40%;
+        padding-left: 45%;
         color:burlywood;
       }
       body{
@@ -47,6 +47,7 @@
   </head>
   <body>
     <h1>Properties</h1>
+    <hr>
 
     <% properties.forEach((property) => { %>
     <div style="display: inline-block; color: slategrey;">
@@ -113,7 +114,7 @@
 
           // Append the comment item to the comment list
           const commentList = document.getElementById(`commentList_${propertyName}`);
-          commentList.appendChild(commentItem);
+          commentList.appendChild('commentItem');
 
           // Clear the comment input field
           commentInput.value = '';
