@@ -12,7 +12,7 @@
   ],
   "author": "hillal",
   "license": "ISC",
-  "dependencies": {    
+  "dependencies": {
     "bcrypt": "^5.1.0",
     "connect-flash": "^0.1.1",
     "ejs": "^3.1.9",
@@ -20,6 +20,7 @@
     "express-session": "^1.17.3",
     "http-errors": "^2.0.0",
     "jason": "^2.0.0",
+    "json": "^11.0.0",
     "leaflet": "^1.9.4",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",

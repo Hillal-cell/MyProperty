@@ -13,7 +13,7 @@
       margin: 0;
       padding: 0;
       background-color:bisque;
-      background-image: url(./Images/minh-pham-OtXADkUh3-I-unsplash.jpg);
+      
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
@@ -48,7 +48,7 @@
       display: inline-block;
       background-color: rgb(151, 97, 52);
       color: #fff;
-      padding: 8px 16px;
+      padding: 8px 2  px;
       font-size: 14px;
       border-radius: 10px;
       text-decoration: none;
@@ -75,7 +75,8 @@
     
   <nav>
   
-   <button  class="bn"> <h2 ><a href="/properties">Manage Properties</a> </h2> </button>
+   <button   class="bn"> <h2 ><a href="/properties">Available Properties</a> </h2> </button>
+   
 
     
 
@@ -86,35 +87,79 @@
     <!-- Display various reports, statements, and outstanding balances for tenants -->
  </nav> <br>
 
- <h1>SYSTEM USERS OVER VIEW</h1>
 
- <table  style=" color: rgb(240, 97, 9); " >
-  <th >
-    <tr>
-      <td>
-        UserId
-      </td>
-      <td>
-        username
-      </td>
-      <td>
-        email
-      </td>
-      <td>
-        contact
-      </td>
-      <td>
-        role
-      </td>
-    </tr>
-  </th>
- </table>
+<div id="tableContainer"></div>
 
- <footer>
-    <p>Propertize &copy; 2023</p>
-  </footer>
+
+
+ 
  
 
+
+  <script>
+    const myButton = document.getElementById('myButton');
+
+    myButton.addEventListener('click', () => {
+      
+      fetch('/table')
+      
+        .then((response) => response.json())
+        
+        .then((data) => {
+          
+          // Process the received data and display it on the page
+          displayTable(data);
+           
+          var gh = document.createElement('h1')
+          var on = document.createTextNode('Above is the  Properties Over View')
+          gh.appendChild(on)
+          var fg = document.getElementById('tableContainer')
+          fg.appendChild(gh)
+          
+          
+          
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    });
+
+    function displayTable(data) {
+      // Access the DOM element where you want to display the table
+      const tableContainer = document.getElementById('tableContainer');
+
+      // Generate the table HTML based on the received data
+      const tableHTML = generateTableHTML(data);
+
+      // Update the content of the table container with the generated HTML
+      tableContainer.innerHTML = tableHTML;
+    }
+
+    function generateTableHTML(data) {
+      // Generate the table HTML markup based on the received data
+      let tableHTML = '<table>';
+      tableHTML += '<tr><th>Property_Name</th><th>Type</th><th>Location</th><th>Description</th><th>Number_Of_Bedrooms</th><th>Number_Of_Bathrooms</th><th>Cost </th><th>Date_Created</th></tr>';
+
+      // Iterate over the data and generate rows for each entry
+      data.forEach((properties) => {
+        tableHTML += `<tr><td>${properties.PropertyName}</td><td>${properties.Type}</td><td>${properties.Location}</td><td>${properties.Description}</td><td>${properties.Number_Of_Bedrooms}</td><td>${properties.Number_Of_Bathrooms}</td><td>${properties.Cost}</td><td>${properties.Dateadded}</td></tr>`;
+      });
+
+      tableHTML += '</table>';
+
+      return tableHTML;
+
+       
+    }
+     
+
+
+  </script>
+  
+<footer>
+    <p>Propertize &copy; 2023</p>
+  </footer>
 </body>
+
 </html>
 

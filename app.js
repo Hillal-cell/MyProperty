@@ -1,8 +1,8 @@
 const express = require("express");
 const mysql2 = require("mysql2");
 const session = require("express-session");
-//const flash = require('connect-flash');
 const path = require("path");
+const json = require('json')
 const multer = require("multer");
 const bcrypt = require("bcrypt");
 const { hash } = require("bcrypt");
@@ -10,12 +10,19 @@ const { hashSync } = require("bcrypt");
 const { env } = require("process");
 const { error } = require("console");
 const fs = require('fs')
-//const assert = require('assert')
-// const bodyParser = require ('body-parser')
 
-//const connection = any();
+
+
 
 const app = express(); // this is our instance of express
+
+app.get("/index", (req, res) => {
+  res.sendFile(__dirname + "/dds/index.html");
+});
+
+app.get("/dashboard", (req, res) => {
+  res.sendFile(__dirname + "/dds/dashboard.html");
+});
 
 app.get('/execute', (req, res) => {
   fs.readFile('./final_propdb.sql', 'utf8', (err, data) => {
@@ -37,6 +44,18 @@ app.get('/execute', (req, res) => {
   });
 });
 
+
+app.get("/registration", (req, res) => {
+  res.sendFile(__dirname + "/dds/registration.html");
+});
+
+app.get("/landlordpage", (req, res) => {
+  res.sendFile(__dirname + "/dds/landlordpage.html");
+});
+
+app.get("/administrator", (req, res) => {
+  res.sendFile(__dirname + "/dds/administrator.html");
+});
 
 // Set up multer storage to define where to store the uploaded image
 const storage = multer.diskStorage({
@@ -67,53 +86,9 @@ app.use(express.urlencoded({ extended: true })); // this is basically to decode 
 app.use(express.static("dds")); //this is to serve html files and also act as the  static folder
 app.use(express.static("Images"));
 app.use(express.static('uploads'))
-// //Flash middleware
-// app.use(flash())
 
-//API routes
 
-// app.get("/", (req, res) => {
-//   res.sendFile(__dirname + "/dds/index.html");
-// });
 
-// app.get("/form", (req, res) => {
-//   // Retrieve error flash messages from the session
-//   const errorFlash = req.flash("error");
-
-//   res.render(__dirname + "/dds/index.ejs", { errorFlash });
-// });
-
-app.get("/index", (req, res) => {
-  res.sendFile(__dirname + "/dds/index.html");
-});
-
-app.get("/dashboard", (req, res) => {
-  res.sendFile(__dirname + "/dds/dashboard.html");
-});
-
-/*app.post('/form',(req,res)=>{
-    console.log(req.body); //the data we get is in the body of request 
-
-     res.status(200);
-    
-
-     //put here the landing page on log in
-
-  // res.sendFile(__dirname+'/dds/thanks.html');
-
-}); */
-
-app.get("/registration", (req, res) => {
-  res.sendFile(__dirname + "/dds/registration.html");
-});
-
-app.get("/landlordpage", (req, res) => {
-  res.sendFile(__dirname + "/dds/landlordpage.html");
-});
-
-app.get("/administrator", (req, res) => {
-  res.sendFile(__dirname + "/dds/administrator.html");
-});
 
 //instating pool
 const pool = mysql2.createPool({
@@ -175,6 +150,78 @@ app.post("/registration", async (req, res) => {
       return;
     }
   );
+});
+
+
+
+//authentication
+app.post("/index", async function (request, response) {
+  // Capture the input fields
+  let email = request.body.email;
+  let password = request.body.password;
+
+  // Execute SQL query that'll select the account from the database based on the specified email
+  connection.query(
+    "SELECT email, password, role FROM registration WHERE email = ?",
+    [email],
+    async function (error, results) {
+      if (error) {
+        throw error;
+      }
+
+      if (results.length > 0) {
+        const hashedPassword = results[0].password;
+        const role = results[0].role;
+
+        // Compare the input password with the stored hashed password
+        const compared = await bcrypt.compare(password, hashedPassword);
+
+        if (compared) {
+          // Authentication successful
+
+          if (role === "tenant") {
+            // Redirect to the tenant dashboard page
+            response.redirect("/properties");
+            console.log("Successfully logged in as a tenant");
+          } else if (role === "system_admin") {
+            // Redirect to the tenant dashboard page
+            response.redirect("/admin");
+            console.log("Successfully logged in as a tenant");}
+
+          else {
+            // Redirect to the landlord page
+            response.redirect("/landlordpage.html");
+            console.log("Successfully logged in as a landlord");
+          }
+        } else {
+          // Authentication failed
+          response.redirect("/index");
+          console.log("Wrong email or password input");
+        }
+      } else {
+        // Account with the specified email not found
+        response.redirect("/index");
+        console.log("Account not found");
+      }
+      response.end();
+    }
+  );
+});
+
+
+//getting table to view users
+app.get('/table', (req, res) => {
+  // Execute your MySQL query to fetch the desired table data
+  pool.query ("SELECT PropertyName,Type,Location,Description,Number_Of_Bedrooms,Number_Of_Bathrooms,Cost,Dateadded,Image  FROM properties",(error, results) => {
+    if (error) {
+      console.error("Error executing MySQL query:", error);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    // Send the retrieved data as the response
+    res.json(results);
+   
+  });
 });
 
 // Handle the image upload route
@@ -273,59 +320,7 @@ app.post("/leaserequest", (req, res) => {
   );
 });
 
-//authentication
-app.post("/index", async function (request, response) {
-  // Capture the input fields
-  let email = request.body.email;
-  let password = request.body.password;
 
-  // Execute SQL query that'll select the account from the database based on the specified email
-  connection.query(
-    "SELECT email, password, role FROM registration WHERE email = ?",
-    [email],
-    async function (error, results) {
-      if (error) {
-        throw error;
-      }
-
-      if (results.length > 0) {
-        const hashedPassword = results[0].password;
-        const role = results[0].role;
-
-        // Compare the input password with the stored hashed password
-        const compared = await bcrypt.compare(password, hashedPassword);
-
-        if (compared) {
-          // Authentication successful
-
-          if (role === "tenant") {
-            // Redirect to the tenant dashboard page
-            response.redirect("/dashboard");
-            console.log("Successfully logged in as a tenant");
-          }if (role === "system_admin") {
-            // Redirect to the tenant dashboard page
-            response.redirect("/admin");
-            console.log("Successfully logged in as a tenant");}
-
-          else {
-            // Redirect to the landlord page
-            response.redirect("./landlordpage.html");
-            console.log("Successfully logged in as a landlord");
-          }
-        } else {
-          // Authentication failed
-          response.redirect("/index");
-          console.log("Wrong email or password input");
-        }
-      } else {
-        // Account with the specified email not found
-        response.redirect("/index");
-        console.log("Account not found");
-      }
-      response.end();
-    }
-  );
-});
 
 //allow ejs files to be read
 app.set("views", path.join(__dirname, "/views"));
@@ -343,6 +338,19 @@ app.get("/properties", (req, res) => {
     res.render("properties", { properties: results });
   });
 });
+
+//system admin ejs page
+app.get("/admin", (req, res) => {
+  pool.query("SELECT * FROM properties", (err, results) => {
+    if (err) {
+      console.log("Error retrieval of data from database");
+      return res.status(500).json({ message: "Internal server error " });
+    }
+    res.render("systemadmin", { properties: results });
+    console.log('admin ')
+  });
+});
+
 
 //feedback capture
 app.post("/properties", (req, res) => {
@@ -366,6 +374,11 @@ app.post("/properties", (req, res) => {
   );
 });
 
+
+
+
+
+
 //api to handle lease requests
 
 app.get("/leaserequest||leaserequests", (req, res) => {
@@ -375,48 +388,15 @@ app.get("/leaserequest||leaserequests", (req, res) => {
       return res.status(500).json({ message: "Internal server error " });
     }
     res.render("leaserequest", { leaserequest: results });
+    //console.log('lease opened ')
   });
 });
 
-// app.get('/properties', (req, res) => {
-//   // Retrieve property details, including the image data or URL, from the database
-//   const property = getPropertyFromDatabase(req.params.id);
-//   // Render the template and pass the property details as variables
-//   res.render('property', { property });
-// });
 
-//TODO THE USER WANTS TO UPDATE HIS OR HER PASSWORD
-app.post("/passwordreset", (req, res) => {
-  const email = req.body.email;
 
-  //email exists?
-  const query = `SELECT * FROM users WHERE email = '${email}'`;
-  connection.query(query, (error, results) => {
-    if (error) {
-      throw error;
-    }
-    if (results.length === 0) {
-      // email not existing in database error show
-      res.send("Email not found !");
-    } else {
-      // email does exist , generate new password
-      const newPassword = req.body.newPassword;
 
-      //change the password in the database  to the new set password
-      const updateQuery = `UPDATE users SET password = '${newPassword}' WHERE email ='${email}'`;
-      connection.query(updateQuery, (err) => {
-        if (err) {
-          console.log("Error updating user data in database :", err);
-          res.send(
-            "Error resetting password. Please try again resetting your password "
-          );
-          return;
-        }
-        res.send("Password has been succesfully reset ");
-      });
-    }
-  });
-});
+
+
 
 // on mac setting an environmet cvariable type in the running terminal  (export PORT=set a port value  ) on windows use (set ...) NB take note on  spacing on >><<
 //if there's aprocessing environment  this value can be set outside the

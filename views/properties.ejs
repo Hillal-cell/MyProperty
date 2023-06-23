@@ -47,6 +47,7 @@
   </head>
   <body>
     <h1>Properties</h1>
+    <a href="leaserqt.html"> <button>Make lease request</button></a>
     <hr>
 
     <% properties.forEach((property) => { %>
@@ -84,6 +85,7 @@
 
     <!-- JavaScript functions for handling button clicks and comments -->
     <script>
+      
       function likeProperty(propertyName) {
         // Get the current like count for the property
         let likeCount = parseInt(document.getElementById(`likeCount_${propertyName}`).textContent);

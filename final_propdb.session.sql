@@ -38,9 +38,11 @@ CREATE TABLE properties (
     Number_Of_Bathrooms INT,
     Cost DECIMAL(10, 2),
     Dateadded timestamp,
-    Image VARCHAR(255),
+    Image blob,
     imageFilename varchar(50)
 );
+
+DROP TABLE properties;
 select *
 from properties;
 CREATE TABLE PropertyFeedback (

@@ -1,134 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Landing page</title>
- 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
- 
-  <style>
-    ul.navbar {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background-color: #1e1d1a;
-    }
+  <!DOCTYPE html>
+  <html lang="en">
 
-    ul.navbar li {
-      display: inline-block;
-    }
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="shortcut icon" href="Images/favicon.png" type="image/x-icon">
+  </head>
 
-    ul.navbar li a {
-      display: block;
-      color: rgb(243, 231, 231);
-      text-align: center;
-      padding: 14px 16px;
-      text-decoration: none;
-    }
+  <body>
+    <h1 style="text-align: center; ">Dashboard</h1>
+    <hr>
 
-    ul.navbar li a:hover {
-     background-color: goldenrod   ;
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-
-    .search {
-      text-align: center;
-      margin-top: 50px;
-    }
-
-    .search input {
-      padding: 10px;
-      width: 600px;
-    }
-
-    .search button {
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      margin-left: 10px;
-    }
-
-    .buttons {
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    .buttons button {
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      margin-right: 20px;
-    }
-
-    .buttons button:last-child {
-      margin-right: 0;
-    }
-
-    .buttons button:hover {
-      opacity: 0.8;
-    }
-  </style>
-
-  <!-- Background Image -->
-  <style>
-    body {
-      background-image: url("Images/house.jpg");
-      background-repeat: no-repeat;
-      background-size: cover;
-     
-    }
-
-
-    .background-image {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      background-image: url("Images/house.jpg");
-      background-repeat: no-repeat;
-      background-size: cover;
-      filter: blur(50px); /* Apply the blur effect */
-    }
-
-  </style>
-</head>
-<body>
-  <ul class="navbar">
-    <li><a href="#">Buy</a></li>
-    <li><a href="./leaserqt.html">Make Request for Property</a></li>
-    <li><a href="#">Property</a></li>
-  </ul>
-
-  <!-- Search Feature -->
-  <div class="container">
-    <div class="search">
-      <input type="text" placeholder="Search for a property..." style="width: 600px;">
-      <button type="submit">Search</button>
+    <div id="property-info">
+      <!-- Property information will be dynamically added here -->
     </div>
 
-    <!-- Buttons -->
-    <div class="buttons">
-      <!-- <button onclick="location.href='#'">Login</button>
-      <button onclick="location.href='#'">Signup</button> -->
+    <div id="comment-section">
+      <!-- Comments will be dynamically added here -->
     </div>
-  </div>
-</body>
-</html>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const propertyInfoParam = urlParams.get('propertyInfo');
+
+        if (propertyInfoParam) {
+          const decodedPropertyInfo = JSON.parse(decodeURIComponent(propertyInfoParam));
+
+          const propertyInfoElement = document.createElement('div');
+          propertyInfoElement.innerHTML = `
+                      <h2>${decodedPropertyInfo.propertyName}</h2>
+                      <img src="${decodedPropertyInfo.imageSrc}" alt="${decodedPropertyInfo.propertyName}" width="200" height="200">
+                      <p>Type: ${decodedPropertyInfo.propertyType}</p>
+                      <p>Location: ${decodedPropertyInfo.propertyLocation}</p>
+                      <p>Description: ${decodedPropertyInfo.propertyDescription}</p>
+                      <p>Number of Bedrooms: ${decodedPropertyInfo.propertyBedrooms}</p>
+                      <p>Number of Bathrooms: ${decodedPropertyInfo.propertyBathrooms}</p>
+                      <p>Cost: ${decodedPropertyInfo.propertyCost}</p>
+                    
+                      </div>
+                  `;
+
+          document.getElementById('property-info').appendChild(propertyInfoElement);
+
+          const likeButton = propertyInfoElement.querySelector('.like-button');
+          const dislikeButton = propertyInfoElement.querySelector('.dislike-button');
+          const commentInput = propertyInfoElement.querySelector('.comment-input');
+          const commentButton = propertyInfoElement.querySelector('.comment-button');
+          const commentsSection = propertyInfoElement.querySelector('.comments-section');
+
+          likeButton.addEventListener('click', () => {
+            // Handle like functionality here
+            console.log('Liked');
+          });
+
+          dislikeButton.addEventListener('click', () => {
+            // Handle dislike functionality here
+            console.log('Disliked');
+          });
+
+          commentButton.addEventListener('click', () => {
+            const comment = commentInput.value.trim();
+            if (comment !== '') {
+              const commentElement = document.createElement('p');
+              commentElement.textContent = comment;
+              commentsSection.appendChild(commentElement);
+              commentInput.value = '';
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+
+  </html>
