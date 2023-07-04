@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Admin</title>
+    <style>
+        h1 {
+            color: chocolate;
+            text-align: center;
+        }
+
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            justify-items: center;
+        }
+
+        .property {
+            text-align: center;
+        }
+    </style>
+    <link rel="shortcut icon" href="Images/favicon.png" type="image/x-icon">
+</head>
+
+<body>
+    <h1>System Admin</h1>
+    <a href="leaserqt"> <button>View leaserequests</button></a>
+    <button id="myButton">Property Overview</button>
+    <hr>
+
+    <div class="property-grid">
+        <% properties.forEach((property)=> { %>
+            <div class="property">
+                <h2>
+                    <%= property.PropertyName %>
+                </h2>
+                <img src="<%= property.imageFilename %>" alt="<%= property.PropertyName %>" width="200" height="200">
+                <p>Type: <%= property.Type %>
+                </p>
+                <p>Location: <%= property.Location %>
+                </p>
+                <p>Description: <%= property.Description %>
+                </p>
+                <p>Number of Bedrooms: <%= property.Number_Of_Bedrooms %>
+                </p>
+                <p>Number of Bathrooms: <%= property.Number_Of_Bathrooms %>
+                </p>
+                <p>Cost: <%= property.Cost %>
+                </p>
+
+                <!-- Comment Section -->
+                <div>
+                    <button class="accept-button">Accept</button>
+                </div>
+            </div>
+            <% }); %>
+    </div>
+    <div id="tableContainer"></div>
+    <script>
+     document.addEventListener('DOMContentLoaded', () => {
+            const acceptButtons = document.querySelectorAll('.accept-button');
+
+            acceptButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const propertyElement = button.parentNode.parentNode;
+                    const propertyInfo = {
+                        propertyName: propertyElement.querySelector('h2').innerText,
+                        propertyType: propertyElement.querySelector('p:nth-of-type(1)').innerText,
+                        propertyLocation: propertyElement.querySelector('p:nth-of-type(2)').innerText,
+                        propertyDescription: propertyElement.querySelector('p:nth-of-type(3)').innerText,
+                        propertyBedrooms: parseInt(propertyElement.querySelector('p:nth-of-type(4)').innerText.split(':')[1].trim()),
+                        propertyBathrooms: parseInt(propertyElement.querySelector('p:nth-of-type(5)').innerText.split(':')[1].trim()),
+                        propertyCost: parseInt(propertyElement.querySelector('p:nth-of-type(6)').innerText.split(':')[1].trim()),
+                        imageSrc: propertyElement.querySelector('img').getAttribute('src')
+                    };
+
+                    const formData = new FormData();
+                    formData.append('propertyName', propertyInfo.propertyName);
+                    formData.append('propertyType', propertyInfo.propertyType);
+                    formData.append('propertyLocation', propertyInfo.propertyLocation);
+                    formData.append('propertyDescription', propertyInfo.propertyDescription);
+                    formData.append('propertyBedrooms', propertyInfo.propertyBedrooms);
+                    formData.append('propertyBathrooms', propertyInfo.propertyBathrooms);
+                    formData.append('propertyCost', propertyInfo.propertyCost);
+                    formData.append('imageFilename', propertyInfo.imageSrc);
+
+                    fetch('/save-property', {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Property saved successfully:', data);
+                            // Add any further actions or notifications upon successful save
+                        })
+                        .catch(error => {
+                            console.error('Error saving property:', error);
+                            // Handle any error that occurs during the saving process
+                        });
+                });
+            });
+        });
+
+        const myButton = document.getElementById('myButton');
+
+        myButton.addEventListener('click', () => {
+            fetch('/table')
+                .then(response => response.json())
+                .then(data => {
+                    // Process the received data and display it on the page
+                    displayTable(data);
+
+                    const tableContainer = document.getElementById('tableContainer');
+                    const heading = document.createElement('h1');
+                    heading.textContent = 'Properties Overview';
+                    tableContainer.insertBefore(heading, tableContainer.firstChild);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
+        function displayTable(data) {
+            // Generate the table HTML based on the received data
+            const tableHTML = generateTableHTML(data);
+
+            // Update the content of the table container with the generated HTML
+            const tableContainer = document.getElementById('tableContainer');
+            tableContainer.innerHTML = tableHTML;
+        }
+
+        function generateTableHTML(data) {
+            // Generate the table HTML markup based on the received data
+            let tableHTML = '<table>';
+            tableHTML += '<tr><th>Property Name</th><th>Type</th><th>Location</th><th>Description</th><th>Number of Bedrooms</th><th>Number of Bathrooms</th><th>Cost</th><th>Date Created</th></tr>';
+
+            // Iterate over the data and generate rows for each entry
+            data.forEach(properties => {
+                tableHTML += `<tr><td>${properties.PropertyName}</td><td>${properties.Type}</td><td>${properties.Location}</td><td>${properties.Description}</td><td>${properties.Number_Of_Bedrooms}</td><td>${properties.Number_Of_Bathrooms}</td><td>${properties.Cost}</td><td>${properties.Dateadded}</td></tr>`;
+            });
+
+            tableHTML += '</table>';
+
+            return tableHTML;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Properties</title>
+    <link rel="shortcut icon" href="Images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .like {
+            color: green;
+            cursor: pointer;
+        }
+
+        .dislike {
+            color: red;
+            cursor: pointer;
+        }
+
+        h1 {
+            padding-left: 45%;
+            color: burlywood;
+        }
+
+        body {
+            background-color: antiquewhite;
+        }
+
+        #ij {
+
+            cursor: pointer;
+        }
+
+        .commentInput {
+            border-radius: 10px;
+            background-color: beige;
+        }
+
+        button {
+            background-color: cadetblue;
+            border: none;
+            padding: 8px;
+            border-radius: 10px;
+        }
+
+        #likeCount {
+            padding: 10px;
+            padding-left: 50px;
+        }
+
+        #e2 {
+            padding-left: 50px;
+        }
+
+        #jk {
+            position: absolute;
+            margin-left: 80%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Properties</h1>
+    <a href="leaserqt.html"> <button>Make lease request</button></a>
+    <a id="jk" href="/"> <button>Log out</button></a>
+    <hr>
+
+    <% properties.forEach((property)=> { %>
+        <div style="display: inline-block; color: slategrey;">
+            <h2>
+                <%= property.PropertyName %>
+            </h2>
+        <img src="<%= property.imageFilename %>" alt="<%= property.PropertyName %>" width="200" height="200">
+
+
+            <p>Type: <%= property.Type %>
+            </p>
+            <p>Location: <%= property.Location %>
+            </p>
+            <p>Description: <%= property.Description %>
+            </p>
+            <p>Number of Bedrooms: <%= property.Number_Of_Bedrooms %>
+            </p>
+            <p>Number of Bathrooms: <%= property.Number_Of_Bathrooms %>
+            </p>
+            <p>Cost: <%= property.Cost %>
+            </p>
+
+
+
+            <!--like button-->
+            <i id="e1" class="far fa-thumbs-up like" onclick="likeProperty('<%= property.PropertyName %>')"></i>
+            <span id="likeCount_<%= property.PropertyName %>">0</span>
+
+            <!--dislik button -->
+            <i id="e2" class="far fa-thumbs-down dislike" onclick="dislikeProperty('<%= property.PropertyName %>')"></i>
+            <span id="dislikeCount_<%= property.PropertyName %>">0</span>
+
+
+
+
+            <!-- Comment Section -->
+            <div>
+                <textarea class="commentInput" name="Comments" id="commentInput_<%= property.PropertyName %>" rows="4"
+                    cols="30" placeholder="Write a comment..."></textarea>
+                <button onclick="commentProperty('<%= property.PropertyName %>')">Submit</button>
+            </div>
+            <ul id="commentList_<%= property.PropertyName %>"></ul>
+        </div>
+        <% }); %>
+
+            <!-- JavaScript functions for handling button clicks and comments -->
+            <script>
+
+                function likeProperty(propertyName) {
+                    // Get the current like count for the property
+                    let likeCount = parseInt(document.getElementById(`likeCount_${propertyName}`).textContent);
+                    // Increment the like count
+                    likeCount++;
+                    // Update the like count display
+                    document.getElementById(`likeCount_${propertyName}`).textContent = likeCount.toString();
+                }
+
+                function dislikeProperty(propertyName) {
+                    // Get the current dislike count for the property
+                    let dislikeCount = parseInt(document.getElementById(`dislikeCount_${propertyName}`).textContent);
+                    // Increment the dislike count
+                    dislikeCount++;
+                    // Update the dislike count display
+                    document.getElementById(`dislikeCount_${propertyName}`).textContent = dislikeCount.toString();
+                }
+
+                function commentProperty(propertyName) {
+                    // Get the user's comment input
+                    const commentInput = document.getElementById(`commentInput_${propertyName}`);
+                    const comment = commentInput.value.trim();
+
+                    if (comment !== '') {
+                        // Create a new comment item
+                        const commentItem = document.createElement('li');
+                        commentItem.textContent = comment;
+
+                        // Append the comment item to the comment list
+                        const commentList = document.getElementById(`commentList_${propertyName}`);
+                        commentList.appendChild('commentItem');
+
+                        // Clear the comment input field
+                        commentInput.value = '';
+                    }
+
+                    var bb = function myhandler() {
+                        alert('moved into image');
+
+                    }
+
+                    document.getElementById('ij').addEventListener('onmouseover', 'bb')  //do thiss !!!!
+                }
+            </script>
+</body>
+
+</html

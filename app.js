@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const { hash } = require("bcrypt");
 const { hashSync } = require("bcrypt");
 const { env } = require("process");
-const { error } = require("console");
+const { error, log } = require("console");
 const fs = require('fs')
 
 
@@ -57,6 +57,13 @@ app.get("/administrator", (req, res) => {
   res.sendFile(__dirname + "/dds/administrator.html");
 });
 
+
+
+
+
+
+
+
 // Set up multer storage to define where to store the uploaded image
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -69,6 +76,15 @@ const storage = multer.diskStorage({
 
 // Initialize multer with the storage configuration
 const upload = multer({ storage: storage });
+
+
+
+
+
+
+
+
+
 
 //session middleware
 app.use(
@@ -85,7 +101,11 @@ app.use(express.json()); // this is to accept data sent in json format
 app.use(express.urlencoded({ extended: true })); // this is basically to decode the data sent through the html form
 app.use(express.static("dds")); //this is to serve html files and also act as the  static folder
 app.use(express.static("Images"));
-app.use(express.static('uploads'))
+//app.use(express.static('uploads'))
+
+app.use(express.static(path.join(__dirname, "uploads")));
+
+
 
 
 
@@ -327,17 +347,32 @@ app.set("views", path.join(__dirname, "/views"));
 app.set("view engine", "ejs");
 
 
+
+
+
+
+
+
 //images to be trieved from database to the landing page
 
 app.get("/properties", (req, res) => {
-  pool.query("SELECT * FROM properties", (err, results) => {
+  pool.query("SELECT * FROM accepted", (err, results) => {  //going to change from properties to accepted
     if (err) {
       console.log("Error retrieval of data from database");
       return res.status(500).json({ message: "Internal server error " });
     }
     res.render("properties", { properties: results });
+    console.log('properties opened')
   });
 });
+
+
+
+
+
+
+
+
 
 //system admin ejs page
 app.get("/admin", (req, res) => {
@@ -346,7 +381,7 @@ app.get("/admin", (req, res) => {
       console.log("Error retrieval of data from database");
       return res.status(500).json({ message: "Internal server error " });
     }
-    res.render("systemadmin", { properties: results });
+    res.render("system", { properties: results });  //changed from systemadmin to accept
     console.log('admin ')
   });
 });
@@ -373,6 +408,110 @@ app.post("/properties", (req, res) => {
     }
   );
 });
+
+
+
+//for the accept table from the system admin
+
+// app.post("/save-property", (req, res) => {
+//   // Extract the property data from the request body
+//   const {
+//     propertyName,
+//     propertyType,
+//     propertyLocation,
+//     propertyDescription,
+//     propertyBedrooms,
+//     propertyBathrooms,
+//     propertyCost,
+//   } = req.body;
+
+//   // Insert the property data into the 'accepted' table
+//   const query = `INSERT INTO accepted (PropertyName, Type, Location, Description, Number_Of_Bedrooms, Number_Of_Bathrooms, Cost) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+//   const values = [
+//     propertyName,
+//     propertyType,
+//     propertyLocation,
+//     propertyDescription,
+//     propertyBedrooms,
+//     propertyBathrooms,
+//     propertyCost,
+//   ];
+
+//   // Execute the SQL query
+//   pool.query(query, values, (err, result) => {
+//     if (err) {
+//       console.error("Error saving property:", err);
+//       res
+//         .status(500)
+//         .json({ error: "An error occurred while saving the property." });
+//     } else {
+//       console.log("Property saved succefully.")
+//       res.status(200).json({ message: "Property saved successfully." });
+//     }
+//   });
+// });
+
+
+
+//const multer = require("multer");
+
+// Create a multer storage instance
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "path/to/save/images"); // Specify the directory where you want to save the images
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.originalname); // Use the original filename for the saved image
+//   },
+// });
+
+
+
+app.post("/save-property", upload.single("image"), (req, res) => {
+  // Extract the property data from the request body
+  const {
+    propertyName,
+    propertyType,
+    propertyLocation,
+    propertyDescription,
+    propertyBedrooms,
+    propertyBathrooms,
+    propertyCost,
+  } = req.body;
+
+  // Extract the filename of the uploaded image
+  const imageFilename = req.body.imageFilename || "";
+
+  // Insert the property data into the 'accepted' table
+  const query =
+    "INSERT INTO accepted (PropertyName, Type, Location, Description, Number_Of_Bedrooms, Number_Of_Bathrooms, Cost, ImageFilename) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+  const values = [
+    propertyName,
+    propertyType,
+    propertyLocation,
+    propertyDescription,
+    propertyBedrooms,
+    propertyBathrooms,
+    propertyCost,
+    imageFilename,
+  ];
+
+  // Execute the SQL query
+  pool.query(query, values, (error, result) => {
+    if (error) {
+      console.error("Error saving property:", error);
+      res
+        .status(500)
+        .json({ error: "An error occurred while saving the property." });
+    } else {
+      res.status(200).json({ message: "Property saved successfully." });
+      console.log('Image uploaded')
+    }
+  });
+});
+
+
+
 
 
 

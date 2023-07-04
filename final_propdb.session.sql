@@ -42,6 +42,24 @@ CREATE TABLE properties (
     imageFilename varchar(50)
 );
 
+CREATE TABLE accepted(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    PropertyName VARCHAR(255),
+    Type VARCHAR(255),
+    Location VARCHAR(255),
+    Description TEXT,
+    Number_Of_Bedrooms INT,
+    Number_Of_Bathrooms INT,
+    Cost DECIMAL(10, 2),
+    imageFilename varchar(255)
+
+);
+
+DROP TABLE accepted; 
+
+SELECT * FROM accepted;
+show CREATE TABLE accepted;
+
 DROP TABLE properties;
 select *
 from properties;
